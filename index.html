@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReadMe - Reading List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface-elevated: #252525;
+      --border: #333333;
+      --primary: #ef4444;
+      --secondary: #3b82f6;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      
+      --cat-academic: #8b5cf6;
+      --cat-podcast: #f59e0b;
+      --cat-linkedin: #0077b5;
+      --cat-reddit: #ff4500;
+      --cat-x: #000000;
+      --cat-blog: #10b981;
+      
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.3);
+      --transition: 200ms ease-out;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    input, textarea, select {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform var(--transition);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      padding: 0 8px;
+      margin-bottom: 32px;
+    }
+
+    .logo svg {
+      color: var(--primary);
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .nav-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .nav-item.active .nav-count {
+      background: var(--primary);
+      color: white;
+    }
+
+    .cat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      width: 100%;
+      text-align: left;
+    }
+
+    .cat-item:hover {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .cat-item.active {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cat-item.active .cat-dot {
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .mobile-close {
+      display: none;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 15, 15, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 50;
+    }
+
+    .menu-btn {
+      display: none;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .menu-btn:hover {
+      background: var(--surface-elevated);
+    }
+
+    .search-container {
+      flex: 1;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px 10px 40px;
+      color: var(--text-primary);
+      transition: all var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      background: var(--surface-elevated);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 18px;
+      height: 18px;
+    }
+
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      transition: all var(--transition);
+    }
+
+    .add-btn:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .content {
+      padding: 32px;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom:  }
+
+    .content-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .item-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: all var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .item-card:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .item-card.unread::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 4px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .item-favicon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-weight: 500;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .item-domain {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .item-category {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--surface-elevated);
+    }
+
+    .item-category.academic { color: var(--cat-academic); background: rgba(139, 92, 246, 0.15); }
+    .item-category.podcast { color: var(--cat-podcast); background: rgba(245, 158, 11, 0.15); }
+    .item-category.linkedin { color: var(--cat-linkedin); background: rgba(0, 119, 181, 0.15); }
+    .item-category.reddit { color: var(--cat-reddit); background: rgba(255, 69, 0, 0.15); }
+    .item-category.x { color: var(--text-primary); background: rgba(255, 255, 255, 0.1); }
+    .item-category.blog { color: var(--cat-blog); background: rgba(16, 185, 129, 0.15); }
+
+    .item-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .item-action {
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+
+    .item-action:hover {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .item-action.read-btn:hover {
+      color: var(--secondary);
+    }
+
+    .item-action.archive-btn:hover {
+      color: var(--cat-blog);
+    }
+
+    .item-action.delete-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      margin: 16px;
+      transform: scale(0.95);
+      transition: all var(--transition);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    .modal-close:hover {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: var(--text-primary);
+      transition: all var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    textarea.form-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      transition: all var(--transition);
+    }
+
+    .btn-secondary {
+      background: var(--surface-elevated);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #dc2626;
+    }
+
+    /* Detail Panel */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 150;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition);
+    }
+
+    .detail-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 500px;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 200;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-overlay.active .detail-panel {
+      transform: translateX(0);
+    }
+
+    .detail-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .detail-favicon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--surface-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .detail-title-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .detail-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .detail-url {
+      font-size: 13px;
+      color: var(--secondary);
+      text-decoration: none;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .detail-url:hover {
+      text-decoration: underline;
+    }
+
+    .detail-close {
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    .detail-close:hover {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+    }
+
+    .detail-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .detail-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .detail-section {
+      margin-bottom: 24px;
+    }
+
+    .detail-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .detail-notes {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: var(--text-primary);
+      min-height: 150px;
+      resize: vertical;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .detail-notes:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .detail-actions {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+
+    .detail-action {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all var(--transition);
+    }
+
+    .detail-action.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .detail-action.primary:hover {
+      background: #dc2626;
+    }
+
+    .detail-action.secondary {
+      background: var(--surface-elevated);
+      color: var(--text-secondary);
+    }
+
+    .detail-action.secondary:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar.open + .detail-overlay {
+        display: block;
+      }
+
+      .mobile-close {
+        display: block;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .header {
+        padding: 12px 16px;
+      }
+
+      .content {
+        padding: 20px 16px;
+      }
+
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .add-btn span {
+        display: none;
+      }
+
+      .add-btn {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+        </svg>
+        ReadMe
+      </div>
+
+      <nav class="nav-section">
+        <div class="nav-label">Library</div>
+        <button class="nav-item active" data-filter="all">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          All Items
+          <span class="nav-count" id="count-all">0</span>
+        </button>
+        <button class="nav-item" data-filter="unread">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+          Unread
+          <span class="nav-count" id="count-unread">0</span>
+        </button>
+        <button class="nav-item" data-filter="archived">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/>
+          </svg>
+          Archived
+          <span class="nav-count" id="count-archived">0</span>
+        </button>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-label">Categories</div>
+        <button class="cat-item" data-filter="academic">
+          <span class="cat-dot" style="background: var(--cat-academic)"></span>
+          Academic Articles
+          <span class="nav-count" id="count-academic">0</span>
+        </button>
+        <button class="cat-item" data-filter="podcast">
+          <span class="cat-dot" style="background: var(--cat-podcast)"></span>
+          Podcasts
+          <span class="nav-count" id="count-podcast">0</span>
+        </button>
+        <button class="cat-item" data-filter="linkedin">
+          <span class="cat-dot" style="background: var(--cat-linkedin)"></span>
+          LinkedIn Posts
+          <span class="nav-count" id="count-linkedin">0</span>
+        </button>
+        <button class="cat-item" data-filter="reddit">
+          <span class="cat-dot" style="background: var(--cat-reddit)"></span>
+          Reddit Threads
+          <span class="nav-count" id="count-reddit">0</span>
+        </button>
+        <button class="cat-item" data-filter="x">
+          <span class="cat-dot" style="background: var(--text-primary)"></span>
+          X Posts
+          <span class="nav-count" id="count-x">0</span>
+        </button>
+        <button class="cat-item" data-filter="blog">
+          <span class="cat-dot" style="background: var(--cat-blog)"></span>
+          Blog Posts
+          <span class="nav-count" id="count-blog">0</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <button class="menu-btn" id="menuBtn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+        <div class="search-container">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by title, URL, or notes...">
+        </div>
+        <button class="add-btn" id="addBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <span>Add Item</span>
+        </button>
+      </header>
+
+      <div class="content">
+        <div class="content-header">
+          <h1 class="content-title" id="contentTitle">All Items</h1>
+        </div>
+        <div class="items-grid" id="itemsGrid"></div>
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <h3>No items yet</h3>
+          <p>Save your first article to start building your reading list</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Modal -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Add New Item</h2>
+        <button class="modal-close" id="closeModal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <form id="addForm">
+        <div class="form-group">
+          <label class="form-label">URL</label>
+          <input type="url" class="form-input" id="formUrl" placeholder="https://..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-input" id="formTitle" placeholder="Enter a title..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="formCategory">
+            <option value="blog">Blog Post</option>
+            <option value="academic">Academic Article</option>
+            <option value="podcast">Podcast</option>
+            <option value="linkedin">LinkedIn Post</option>
+            <option value="reddit">Reddit Thread</option>
+            <option value="x">X Post</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes (optional)</label>
+          <textarea class="form-input" id="formNotes" placeholder="Add any notes..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelAdd">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-overlay" id="detailOverlay">
+    <div class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-favicon" id="detailFavicon">📄</div>
+        <div class="detail-title-wrap">
+          <h2 class="detail-title" id="detailTitle"></h2>
+          <a href="#" class="detail-url" id="detailUrl" target="_blank"></a>
+        </div>
+        <button class="detail-close" id="closeDetail">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-meta">
+          <span class="item-category" id="detailCategory"></span>
+          <span class="item-date" id="detailDate"></span>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Notes</div>
+          <textarea class="detail-notes" id="detailNotes" placeholder="Add your notes here..."></textarea>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button class="detail-action secondary" id="detailArchive">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/>
+          </svg>
+          Archive
+        </button>
+        <button class="detail-action primary" id="detailDelete">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = {
+      academic: { name: 'Academic Article', icon: '🎓' },
+      podcast: { name: 'Podcast', icon: '🎙️' },
+      linkedin: { name: 'LinkedIn Post', icon: '💼' },
+      reddit: { name: 'Reddit Thread', icon: '🤖' },
+      x: { name: 'X Post', icon: '𝕏' },
+      blog: { name: 'Blog Post', icon: '📝' }
+    };
+
+    const STORAGE_KEY = 'readlater_items';
+    let items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    let currentFilter = 'all';
+    let currentItemId = null;
+    let searchQuery = '';
+
+    function saveItems() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function getDomain(url) {
+      try {
+        return new URL(url).hostname.replace('www.', '');
+      } catch {
+        return url;
+      }
+    }
+
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diff = now - date;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (days === 0) return 'Today';
+      if (days === 1) return 'Yesterday';
+      if (days < 7) return `${days} days ago`;
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getEmoji(url) {
+      const domain = getDomain(url).toLowerCase();
+      if (domain.includes('youtube') || domain.includes('spotify')) return '🎬';
+      if (domain.includes('linkedin')) return '💼';
+      if (domain.includes('reddit')) return '🤖';
+      if (domain.includes('twitter') || domain.includes('x.com')) return '𝕏';
+      if (domain.includes('medium')) return '📰';
+      if (domain.includes('github')) return '💻';
+      return '📄';
+    }
+
+    function updateCounts() {
+      const all = items.filter(i => !i.isArchived);
+      const unread = all.filter(i => !i.isRead);
+      const archived = items.filter(i => i.isArchived);
+      
+      document.getElementById('count-all').textContent = all.length;
+      document.getElementById('count-unread').textContent = unread.length;
+      document.getElementById('count-archived').textContent = archived.length;
+      
+      Object.keys(CATEGORIES).forEach(cat => {
+        document.getElementById(`count-${cat}`).textContent = 
+          items.filter(i => i.category === cat && !i.isArchived).length;
+      });
+    }
+
+    function getFilteredItems() {
+      let filtered = items;
+      
+      if (currentFilter === 'unread') {
+        filtered = filtered.filter(i => !i.isRead && !i.isArchived);
+      } else if (currentFilter === 'archived') {
+        filtered = filtered.filter(i => i.isArchived);
+      } else if (currentFilter !== 'all') {
+        filtered = filtered.filter(i => i.category === currentFilter && !i.isArchived);
+      } else {
+        filtered = filtered.filter(i => !i.isArchived);
+      }
+      
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(i => 
+          i.title.toLowerCase().includes(q) ||
+          i.url.toLowerCase().includes(q) ||
+          i.notes.toLowerCase().includes(q)
+        );
+      }
+      
+      return filtered.sort((a, b) => b.createdAt - a.createdAt);
+    }
+
+    function renderItems() {
+      const filtered = getFilteredItems();
+      const grid = document.getElementById('itemsGrid');
+      const empty = document.getElementById('emptyState');
+      
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      empty.style.display = 'none';
+      grid.innerHTML = filtered.map(item => `
+        <div class="item-card ${!item.isRead ? 'unread' : ''}" data-id="${item.id}">
+          <div class="item-header">
+            <div class="item-favicon">${getEmoji(item.url)}</div>
+            <div class="item-info">
+              <div class="item-title">${item.title}</div>
+              <div class="item-domain">${getDomain(item.url)}</div>
+            </div>
+          </div>
+          <div class="item-meta">
+            <span class="item-category ${item.category}">${CATEGORIES[item.category].name}</span>
+            <span class="item-date">${formatDate(item.createdAt)}</span>
+          </div>
+          <div class="item-actions">
+            <button class="item-action read-btn" data-action="toggleRead" data-id="${item.id}">
+              ${item.isRead ? 'Unarchive' : 'Mark Read & Archive'}
+            </button>
+            <button class="item-action archive-btn" data-action="archive" data-id="${item.id}">
+              Archive
+            </button>
+            <button class="item-action delete-btn" data-action="delete" data-id="${item.id}">
+              Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateTitle() {
+      const title = document.getElementById('contentTitle');
+      if (currentFilter === 'all') title.textContent = 'All Items';
+      else if (currentFilter === 'unread') title.textContent = 'Unread';
+      else if (currentFilter === 'archived') title.textContent = 'Archived';
+      else title.textContent = CATEGORIES[currentFilter].name;
+    }
+
+    function openAddModal() {
+      document.getElementById('addModal').classList.add('active');
+      document.getElementById('formUrl').focus();
+      
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('url')) {
+        document.getElementById('formUrl').value = params.get('url');
+        document.getElementById('formTitle').value = params.get('title') || '';
+        
+        const url = params.get('url').toLowerCase();
+        const categorySelect = document.getElementById('formCategory');
+        
+        if (url.includes('linkedin.com')) {
+          categorySelect.value = 'linkedin';
+        } else if (url.includes('reddit.com')) {
+          categorySelect.value = 'reddit';
+        } else if (url.includes('x.com') || url.includes('twitter.com')) {
+          categorySelect.value = 'x';
+        } else if (url.includes('spotify') || url.includes('youtube.com') || url.includes('podcast')) {
+          categorySelect.value = 'podcast';
+        } else if (url.includes('arxiv.org') || url.includes('scholar.google') || url.includes('academic')) {
+          categorySelect.value = 'academic';
+        } else {
+          categorySelect.value = 'blog';
+        }
+        
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+
+    function closeAddModal() {
+      document.getElementById('addModal').classList.remove('active');
+      document.getElementById('addForm').reset();
+    }
+
+    function openDetail(item) {
+      currentItemId = item.id;
+      document.getElementById('detailFavicon').textContent = getEmoji(item.url);
+      document.getElementById('detailTitle').textContent = item.title;
+      document.getElementById('detailUrl').textContent = getDomain(item.url);
+      document.getElementById('detailUrl').href = item.url;
+      document.getElementById('detailCategory').textContent = CATEGORIES[item.category].name;
+      document.getElementById('detailCategory').className = `item-category ${item.category}`;
+      document.getElementById('detailDate').textContent = formatDate(item.createdAt);
+      document.getElementById('detailNotes').value = item.notes || '';
+      document.getElementById('detailOverlay').classList.add('active');
+    }
+
+    function closeDetail() {
+      document.getElementById('detailOverlay').classList.remove('active');
+      currentItemId = null;
+    }
+
+    function addItem(e) {
+      e.preventDefault();
+      
+      const newItem = {
+        id: generateId(),
+        url: document.getElementById('formUrl').value,
+        title: document.getElementById('formTitle').value,
+        category: document.getElementById('formCategory').value,
+        notes: document.getElementById('formNotes').value,
+        isRead: false,
+        isArchived: false,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      
+      items.unshift(newItem);
+      saveItems();
+      closeAddModal();
+      updateCounts();
+      renderItems();
+    }
+
+    function handleItemAction(action, id) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      
+      switch (action) {
+        case 'toggleRead':
+          if (!item.isRead) {
+            item.isRead = true;
+            item.isArchived = true;
+          } else {
+            item.isRead = false;
+            item.isArchived = false;
+          }
+          item.updatedAt = Date.now();
+          break;
+        case 'archive':
+          item.isArchived = true;
+          item.updatedAt = Date.now();
+          break;
+        case 'delete':
+          if (confirm('Delete this item?')) {
+            items = items.filter(i => i.id !== id);
+          }
+          break;
+      }
+      
+      saveItems();
+      updateCounts();
+      renderItems();
+    }
+
+    function handleDetailAction(action) {
+      if (!currentItemId) return;
+      
+      const item = items.find(i => i.id === currentItemId);
+      if (!item) return;
+      
+      switch (action) {
+        case 'saveNotes':
+          item.notes = document.getElementById('detailNotes').value;
+          item.updatedAt = Date.now();
+          saveItems();
+          break;
+        case 'archive':
+          item.isArchived = !item.isArchived;
+          item.updatedAt = Date.now();
+          closeDetail();
+          break;
+        case 'delete':
+          if (confirm('Delete this item?')) {
+            items = items.filter(i => i.id !== currentItemId);
+            saveItems();
+            closeDetail();
+          }
+          break;
+      }
+      
+      updateCounts();
+      renderItems();
+    }
+
+    // Event Listeners
+    document.getElementById('addBtn').addEventListener('click', openAddModal);
+    document.getElementById('closeModal').addEventListener('click', closeAddModal);
+    document.getElementById('cancelAdd').addEventListener('click', closeAddModal);
+    document.getElementById('addForm').addEventListener('submit', addItem);
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderItems();
+    });
+
+    document.getElementById('formUrl').addEventListener('input', (e) => {
+      const url = e.target.value.toLowerCase();
+      const categorySelect = document.getElementById('formCategory');
+      
+      if (url.includes('linkedin.com')) {
+        categorySelect.value = 'linkedin';
+      } else if (url.includes('reddit.com')) {
+        categorySelect.value = 'reddit';
+      } else if (url.includes('x.com') || url.includes('twitter.com')) {
+        categorySelect.value = 'x';
+      } else if (url.includes('spotify') || url.includes('youtube.com') || url.includes('podcast')) {
+        categorySelect.value = 'podcast';
+      } else if (url.includes('arxiv.org') || url.includes('scholar.google') || url.includes('academic')) {
+        categorySelect.value = 'academic';
+      }
+    });
+
+    document.querySelectorAll('.nav-item, .cat-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item, .cat-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        updateTitle();
+        renderItems();
+        
+        if (window.innerWidth <= 768) {
+          document.getElementById('sidebar').classList.remove('open');
+        }
+      });
+    });
+
+    document.getElementById('itemsGrid').addEventListener('click', (e) => {
+      const card = e.target.closest('.item-card');
+      const action = e.target.closest('[data-action]');
+      
+      if (action) {
+        e.stopPropagation();
+        handleItemAction(action.dataset.action, action.dataset.id);
+      } else if (card) {
+        const item = items.find(i => i.id === card.dataset.id);
+        if (item) openDetail(item);
+      }
+    });
+
+    document.getElementById('closeDetail').addEventListener('click', closeDetail);
+    document.getElementById('detailOverlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeDetail();
+    });
+
+    document.getElementById('detailNotes').addEventListener('change', (e) => {
+      if (currentItemId) {
+        const item = items.find(i => i.id === currentItemId);
+        if (item) {
+          item.notes = e.target.value;
+          item.updatedAt = Date.now();
+          saveItems();
+        }
+      }
+    });
+
+    document.getElementById('detailArchive').addEventListener('click', () => handleDetailAction('archive'));
+    document.getElementById('detailDelete').addEventListener('click', () => handleDetailAction('delete'));
+
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.add('open');
+    });
+
+    document.getElementById('addModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeAddModal();
+    });
+
+    // Initialize
+    updateCounts();
+    renderItems();
+    
+    // Auto-open modal if URL params exist (from bookmarklet)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('url') && params.get('open') === '1') {
+      // Remove /capture from URL path, keep params
+      if (window.location.pathname === '/capture') {
+        window.history.replaceState({}, '', '/?' + params.toString());
+      }
+      setTimeout(() => openAddModal(), 100);
+    }
+  </script>
+</body>
+</html>

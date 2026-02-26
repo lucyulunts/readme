@@ -1,0 +1,12 @@
+{
+  "name": "ReadMe Saver",
+  "version": "0.3.0",
+  "manifest_version": 3,
+  "description": "Save the current page to ReadMe and open the modal on the ReadMe app.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ReadMe Saver"
+  },
+  "permissions": ["tabs"],
+  "host_permissions": []
+}
