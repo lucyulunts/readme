@@ -2,7 +2,8 @@
 
 A Pocket-style reading list app to save articles, posts, and content for later reading. Perfect for capturing interesting stuff that crosses your email/WhatsApp/Slack at the wrong time.
 
-![ReadMe Screenshot](https://via.placeholder.com/800x400/0f0f0f/333333?text=ReadMe)
+<img width="1081" height="521" alt="image" src="https://github.com/user-attachments/assets/126a2c07-2be6-4eda-bc6e-938378ed1cef" />
+
 
 ## Features
 
